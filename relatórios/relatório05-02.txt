@@ -1,0 +1,15 @@
+@Author : Adriano Santana
+	  Juan Carlo
+
+
+Testes feitos usando a esp32 modo DeepSleep, tensão de entrada sendo fornecida pela fonte e a aferição da corrente usando o multimetro.
+
+Leitura multimetro
+
+Corrente "WakeUp" --- 50mA
+Corrente "Sleep" --- 10,75 mA
+
+Leitura Fonte
+
+Corrente "WakeUp" --- 49mA
+Corrente "Sleep" --- 5 mA
