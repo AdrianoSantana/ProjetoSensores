@@ -1,0 +1,9 @@
+Lista pinagems rfm95
+
+MISO ---- GPIO15
+MOS1 ---- GPIO2
+SCK ---- GPIO0
+NSS ---- GPIO4
+RESET ---- GPIO5
+DI0 ----- GPIO12
+3.3V --- GPIO14
