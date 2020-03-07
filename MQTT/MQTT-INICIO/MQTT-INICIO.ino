@@ -80,14 +80,14 @@ void loop() {
      valorLdr = analogRead(sensorLdr);
      delay(1000);
 
-    /*
+    
      //Convertendo valorSensor em um array de char
      char sensorLdrString[8];
-     dtostrf(sensorLdr, 1, 2, sensorLdrString);
-    */
-     MQTT.publish(topico,"Olá Adriano"); //Envia dados para o topico
+     dtostrf(valorLdr, 1, 2, sensorLdrString);
+    
+     MQTT.publish(topico,sensorLdrString); //Envia dados para o topico
      Serial.print("Enviado: ");
-    // Serial.println(valorLdr);
+     Serial.println(valorLdr);
      MQTT.loop(); 
     
    }
