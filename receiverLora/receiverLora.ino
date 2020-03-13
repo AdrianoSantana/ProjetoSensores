@@ -3,23 +3,27 @@
 #include <Wire.h> 
 #include <string> 
 
-#define SCK     5    // GPIO5  -- SX1278's SCK
-#define MISO    19   // GPIO19 -- SX1278's MISO
-#define MOSI    27   // GPIO27 -- SX1278's MOSI
-#define SS      18   // GPIO18 -- SX1278's CS
-#define RST     14   // GPIO14 -- SX1278's RESET
-#define DI0     26   // GPIO26 -- SX1278's IRQ(Interrupt Request)
-#define BAND    915E6
+// Pinos de controle da LoRa
+#define SCK     5    
+#define MISO    19 //-   
+#define MOSI    15 //-   
+#define SS      23 //-  
+#define RST     4  
+#define DI0     27   //-
+#define BAND  915E6
 
-#define AMARELO 22
-#define PRETO 13
-#define VERDE 14
-#define LARANJA 21
+// Pinos de controle do motor
+#define AMARELO 25
+#define PRETO 33
+#define VERDE 32
+#define LARANJA 2
 
+int packetSize = 0;
 String rssi = "RSSI --";
 String packSize = "--";
 String packet ;
 
+// Funções de acionamento do motor
 void direcaoUm() {
   /*
    * Amarelo - H
@@ -58,6 +62,7 @@ void off() {
   digitalWrite(LARANJA,HIGH);
 }
 
+// Funcoes ler dados da LoRa
 void loraData(){
   
   Serial.println("Received " + packSize + " bytes");
@@ -73,23 +78,33 @@ void cbk(int packetSize) {
   
   for (int i = 0; i < packetSize; i++)
     packet += (char) LoRa.read();
-
-  if(packet.toInt() < 800)
-    digitalWrite(13,HIGH);
-  else
-    digitalWrite(13,LOW);
     
+  if(packet.toInt() < 4000) {
+    Serial.println("Ligando valvula!");
+    direcaoUm();
+    delay(30);
+    off();
+    delay(1500);
+    direcaoDois();
+    delay(30);
+    off();
+    delay(5000);
+  }
+    
+  else
+    off();
+  
   rssi = "RSSI " + String(LoRa.packetRssi(), DEC);
   loraData();
   
 }
 
 void setup() {
-  pinMode(AMARELO, OUTPUT);
-  pinMode(PRETO, OUTPUT);
-  pinMode(LARANJA, OUTPUT);
-  pinMode(VERDE, OUTPUT);
-  off();
+  pinMode(AMARELO,OUTPUT);
+  pinMode(PRETO,OUTPUT);
+  pinMode(VERDE,OUTPUT);
+  pinMode(LARANJA,OUTPUT);
+  off(); //Motor inicia desligado
   
   Serial.begin(115200);
   while (!Serial);
@@ -106,16 +121,14 @@ void setup() {
   LoRa.receive();
   Serial.println("init ok");
    
-  delay(1500);
 }
 
 void loop() {
   
-  int packetSize = LoRa.parsePacket();
+  packetSize = LoRa.parsePacket();
 
   if (packetSize)
     cbk(packetSize);
 
-  delay(10);
   
 }

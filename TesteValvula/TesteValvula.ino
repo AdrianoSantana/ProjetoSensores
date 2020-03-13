@@ -1,12 +1,7 @@
-/*
- * Cores relativas aos fios de controle do circuito
- * Cada cor sera acionada por uma saída digital da esp32
- */
-#define AMARELO 5
-#define PRETO 21
-#define VERDE 18
-#define LARANJA 19
-#define LED 2
+#define AMARELO 25
+#define PRETO 33
+#define VERDE 32
+#define LARANJA 15
 
 void direcaoUm() {
   /*
@@ -67,12 +62,18 @@ void loop() {
   */
  direcaoUm();
  delay(30);
+ direcaoUm();
+ delay(30);
+ 
  off();
- delay(5000);
+ delay(1000);
+ 
+ direcaoDois();
+ delay(30);
  direcaoDois();
  delay(30);
  off();
- delay(5000);
+ delay(1000);
  /*
  Este trecho de código foi usado para Ligar o motor
  delay(5000);

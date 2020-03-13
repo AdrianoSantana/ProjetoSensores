@@ -1,15 +1,17 @@
 #include <SPI.h>
 #include <LoRa.h> 
 
-#define SCK     5    // GPIO5  -- SX1278's SCK
-#define MISO    19   // GPIO19 -- SX1278's MISnO
-#define MOSI    18   // GPIO27 -- SX1278's MOSI
-#define SS      21   // GPIO18 -- SX1278's CS
-#define RST     4   // GPIO14 -- SX1278's RESET
-#define DI0     26   // GPIO26 -- SX1278's IRQ(Interrupt Request)
+#define SCK     5    
+#define MISO    19   
+#define MOSI    18   
+#define SS      21   
+#define RST     4
+#define DI0     26
 #define BAND  915E6
 
-int flag = 0;
+#define sensorUmidade 35
+
+int valorUmidade = 0;
 String rssi = "RSSI --";
 String packSize = "--";
 String packet ;
@@ -17,15 +19,15 @@ String packet ;
  
 
 void setup() {
- 
+  pinMode(sensorUmidade, INPUT);
   Serial.begin(115200);
   while (!Serial);
-  Serial.println();
+  //Serial.println();
   Serial.println("LoRa Sender Test");
-  LoRa.setSpreadingFactor(12);
+  //LoRa.setSpreadingFactor(12);
   SPI.begin(SCK,MISO,MOSI,SS);
   LoRa.setPins(SS,RST,DI0);
-  delay(5000);
+  //delay(5000);
   if (!LoRa.begin(915E6)) {
     Serial.println("Starting LoRa failed!");
     while (1);
@@ -36,15 +38,18 @@ void setup() {
 }
 
 void loop() {
-  Serial.println(flag);
+  valorUmidade = analogRead(sensorUmidade);
+  Serial.print("Valor sensor não enviado pela loRa :");
+  Serial.println(valorUmidade);
+ 
   
   // Ligado o LoRa
   LoRa.beginPacket();
-  LoRa.print(flag);
+  LoRa.print(valorUmidade);
   LoRa.endPacket();
-  delay(3000);
 
-  flag++;
- 
-               
+  Serial.print("Valor sensor enviado pela loRa : ");
+  Serial.println(valorUmidade);
+  delay(2000);
+       
 }
